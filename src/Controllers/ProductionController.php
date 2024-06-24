@@ -2,7 +2,6 @@
 namespace Ond\AtelierCouturePoo\Controllers;
 
 use Ond\AtelierCouturePoo\Core\Controller;
-use Ond\AtelierCouturePoo\Model\ApprovisionnementModel;
 use Ond\AtelierCouturePoo\Model\ArticleModel;
 use Ond\AtelierCouturePoo\Model\CategorieModel;
 use Ond\AtelierCouturePoo\Model\FournisseurModel;
@@ -42,6 +41,8 @@ class ProductionController extends Controller
         $this->AjouterArticleDansProd($_POST);
       } elseif ($_REQUEST['action'] == "save-production") {
         $this->AjouterProd();
+      }if ($_REQUEST['action'] == "filter-production") {
+        $this->ListerWithFilter();
       }
     } else {
       $this->Lister();
@@ -51,6 +52,33 @@ class ProductionController extends Controller
   public function Lister(): void
   {
     $this->renderView("productions/liste", [
+        "articles" => $this->articleModel->findAllVentes(),
+      "productions" => $this->prodModel->findAll()
+    ]);
+  }
+
+  public function ListerWithFilter(): void
+  {
+
+
+    if ($_GET['date'] != "" && isset($_GET['articleId']) ) {
+      $this->renderView("productions/liste", [
+        "articles" => $this->articleModel->findAllVentes(),
+        "productions" => $this->prodModel->findAllWithAllFilter($_GET['date'], $_GET['articleId'])
+      ]);
+    }elseif ($_GET['date'] != "" && isset($_GET['articleId']) == false ) {
+      $this->renderView("productions/liste", [
+        "articles" => $this->articleModel->findAllVentes(),
+        "productions" => $this->prodModel->findAllWithDtate($_GET['date'])
+      ]);
+    }elseif ($_GET['date'] == "" && isset($_GET['articleId'])) {
+      $this->renderView("productions/liste", [
+        "articles" => $this->articleModel->findAllVentes(),
+        "productions" => $this->prodModel->findAllWithFilterArticle($_GET['articleId'])
+      ]);
+    }
+    $this->renderView("productions/liste", [
+        "articles" => $this->articleModel->findAllVentes(),
       "productions" => $this->prodModel->findAll()
     ]);
   }

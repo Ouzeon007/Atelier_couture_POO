@@ -14,7 +14,7 @@
           class="w-full px-3 py-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 dark:bg-gray-800 text-gray-400">
           <option value="" disabled selected class="dark:text-gray-300">Choisissez un type</option>
           <?php foreach ($articles as $article): ?>
-            <option value="<?= $article["id"] ?>" class="dark:text-gray-300"><?= $article["libelle"] ?>
+            <option value="<?= $article["id"] ?>" <?= isset($_GET['articleId']) && $_GET['articleId'] == $article["id"] ? 'selected' : '' ?> class="dark:text-gray-300"><?= $article["libelle"] ?>
             </option>
           <?php endforeach ?>
         </select>
@@ -40,7 +40,7 @@
 </div>
 <div>
   <table
-    class=" bg-opacity-0 w-full max-w-4xl mx-auto overflow-x-auto shadow-xl sm:rounded-lg text-sm text-left rtl:text-right text-gray-500 mt-10 dark:text-gray-400 border-b-8 border-purple-500 ">
+    class=" bg-opacity-0 w-full max-w-4xl mx-auto overflow-x-auto shadow-xl sm:rounded-lg text-sm text-left rtl:text-right text-gray-500 -scroll-mt-5 dark:text-gray-400 border-b-8 border-purple-500 ">
     <caption
       class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800 rounded-t-lg">
       Tableau Articles

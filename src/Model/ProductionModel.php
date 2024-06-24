@@ -34,6 +34,20 @@ final class ProductionModel extends Model
     {
         return $this->executeSelect("SELECT * FROM $this->table a ");
     }
+    public function findAllWithDtate(string $date): array
+    {
+        return $this->executeSelect("SELECT * FROM $this->table a WHERE a.date = '$date'");
+    }
+    public function findAllWithAllFilter(string $date, int $id): array
+    {
+        // return $this->executeSelect("SELECT * FROM $this->table a WHERE a.date = '$date'");
+        return $this->executeSelect("SELECT * FROM $this->table a , detailprod d ,article ac WHERE a.date = '$date' and d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id");
+    }
+    public function findAllWithFilterArticle(int $id): array
+    {
+        // return $this->executeSelect("SELECT * FROM $this->table a WHERE a.date = '$date'");
+        return $this->executeSelect("SELECT * FROM $this->table a , detailprod d ,article ac WHERE d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id");
+    }
     // public function findById(int $id): array
     // {
     //     return $this->executeSelect("SELECT * FROM `type` WHERE `idType`=$id");

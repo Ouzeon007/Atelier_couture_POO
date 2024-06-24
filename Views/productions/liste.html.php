@@ -13,15 +13,15 @@
                     class="w-full px-3 py-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 dark:bg-gray-800 text-gray-400">
                     <option value="" disabled selected class="dark:text-gray-300">Choisissez un type</option>
                     <?php foreach ($articles as $article): ?>
-                        <option value="<?= $article["id"] ?>" class="dark:text-gray-300"><?= $article["libelle"] ?>
+                        <option value="<?= $article["id"] ?>" <?= isset($_GET['articleId']) && $_GET['articleId'] == $article["id"] ? 'selected' : '' ?> class="dark:text-gray-300"><?= $article["libelle"] ?>
                         </option>
                     <?php endforeach ?>
                 </select>
             </div>
 
             <div class="mt-8">
-                <input type="hidden" name="controller" value="appro">
-                <input type="hidden" name="action" value="filter-appro">
+                <input type="hidden" name="controller" value="production">
+                <input type="hidden" name="action" value="filter-production">
                 <button type="submit"
                     class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">Filtrer</button>
             </div>
@@ -29,7 +29,7 @@
     </form>
 
     <table
-        class=" bg-opacity-0 w-full max-w-4xl mx-auto overflow-x-auto shadow-xl sm:rounded-lg text-sm text-left rtl:text-right text-gray-500 mt-20 dark:text-gray-400 border-b-8 border-purple-500 ">
+        class=" bg-opacity-0 w-full max-w-4xl mx-auto overflow-x-auto shadow-xl sm:rounded-lg text-sm text-left rtl:text-right text-gray-500 mt-8 dark:text-gray-400 border-b-8 border-purple-500 ">
         <caption
             class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800 rounded-t-lg">
             Tableau Articles
@@ -64,9 +64,9 @@
                     <td class="px-6 py-4">
 
                         <a class="text-purple-600 dark:text-purple-400 hover:text-purple-800 "
-                            href="<?= WEBROOT ?>/?controller=pr$production&action=update-article&id=<?= $production['id'] ?>">Modifier</a>
+                            href="<?= WEBROOT ?>/?controller=pr$production&action=update-article&id=<?= $production['idProd'] ?>">Modifier</a>
                         <a class="text-red-400 hover:text-red-900 ml-4"
-                            href="<?= WEBROOT ?>/?controller=pr$production&action=delete-article&id=<?= $production['id'] ?>"
+                            href="<?= WEBROOT ?>/?controller=pr$production&action=delete-article&id=<?= $production['idProd'] ?>"
                             onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">Supprimer</a>
                     </td>
                 </tr>

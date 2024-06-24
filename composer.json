@@ -1,0 +1,21 @@
+{
+    "name": "nouss/atelier_couture_poo",
+    "version": "2.7.6",
+    "description": "exam php second semestre",
+    "type": "projet",
+    "autoload": {
+        "psr-4": {
+            "Ond\\AtelierCouturePoo\\Controllers\\": "src/Controllers",
+            "Ond\\AtelierCouturePoo\\Model\\": "src/Model",
+            "Ond\\AtelierCouturePoo\\Core\\": "src/Core",
+            "Ond\\AtelierCouturePoo\\Api\\": "src/api"
+        }
+    },
+    "authors": [
+        {
+            "name": "ouzeon007",
+            "email": "nousseynou20@gmail.com"
+        }
+    ],
+    "require": {}
+}

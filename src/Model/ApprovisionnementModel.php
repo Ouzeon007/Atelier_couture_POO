@@ -32,8 +32,20 @@ final class ApprovisionnementModel extends Model
     }
     public function findAll(): array
     {
-        return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour");
+        return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour ");
     }
+    public function findAllWithPagination(int $page=0, int $offset=OFFSET): array
+    {
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrAppro FROM appro",true);
+        $data= $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour limit $page, $offset");
+        return[
+            "totalElements"=>$result['nbrAppro'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrAppro']/$offset)
+        ];
+    }
+
     public function findAllWithAllFilter(string $date, int $id, string $fournisseur): array
     {
         return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f,detail d,article ac WHERE a.fournisseurId = f.idFour and a.date = '$date' and d.approId =a.idAppro and d.articleId=ac.id  AND d.articleId=$id and f.nomFour = '$fournisseur'");

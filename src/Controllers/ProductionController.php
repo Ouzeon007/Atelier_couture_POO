@@ -34,77 +34,113 @@ class ProductionController extends Controller
   {
     if (isset($_REQUEST['action'])) {
       if ($_REQUEST['action'] == "liste-production") {
-        $this->Lister();
+        $this->Lister($_REQUEST['page']);
       } elseif ($_REQUEST['action'] == "form-production") {
         $this->ChargerFormulaire();
       } elseif ($_REQUEST['action'] == "add-production") {
         $this->AjouterArticleDansProd($_POST);
       } elseif ($_REQUEST['action'] == "save-production") {
         $this->AjouterProd();
-      }if ($_REQUEST['action'] == "filter-production") {
-        $this->ListerWithFilter();
+      }elseif ($_REQUEST['action'] == "vider-panier") {
+        $this->viderPanier();
+      }elseif ($_REQUEST['action'] == "filter-production") {
+        $this->ListerWithFilter($_REQUEST['page']);
       }
     } else {
       $this->Lister();
     }
 
   }
-  public function Lister(): void
+  public function Lister($page = 0): void
   {
     $this->renderView("productions/liste", [
         "articles" => $this->articleModel->findAllVentes(),
-      "productions" => $this->prodModel->findAll()
+      "productions" => $this->prodModel->findAll(),
+      "reponse" => $this->prodModel->findAllWithPagination($page, OFFSET),
+      "currentPage" => $page
     ]);
   }
 
-  public function ListerWithFilter(): void
+  public function ListerWithFilter($page=0): void
   {
 
 
     if ($_GET['date'] != "" && isset($_GET['articleId']) ) {
       $this->renderView("productions/liste", [
         "articles" => $this->articleModel->findAllVentes(),
-        "productions" => $this->prodModel->findAllWithAllFilter($_GET['date'], $_GET['articleId'])
+        "productions" => $this->prodModel->findAllWithAllFilter($_GET['date'], $_GET['articleId']),
+        "reponse" => $this->prodModel->findAllWithAllFilter($_GET['date'], $_GET['articleId'],$page,OFFSET),
+        "currentPage" => $page
       ]);
     }elseif ($_GET['date'] != "" && isset($_GET['articleId']) == false ) {
       $this->renderView("productions/liste", [
         "articles" => $this->articleModel->findAllVentes(),
-        "productions" => $this->prodModel->findAllWithDtate($_GET['date'])
+        "productions" => $this->prodModel->findAllWithDtate($_GET['date']),
+        "reponse" => $this->prodModel->findAllWithDtate($_GET['date'],$page, OFFSET),
+        "currentPage" => $page
       ]);
     }elseif ($_GET['date'] == "" && isset($_GET['articleId'])) {
       $this->renderView("productions/liste", [
         "articles" => $this->articleModel->findAllVentes(),
-        "productions" => $this->prodModel->findAllWithFilterArticle($_GET['articleId'])
+        "productions" => $this->prodModel->findAllWithFilterArticle($_GET['articleId']),
+        "reponse" => $this->prodModel->findAllWithFilterArticle($_GET['articleId'],$page,OFFSET),
+        "currentPage"=> $page
       ]);
     }
     $this->renderView("productions/liste", [
         "articles" => $this->articleModel->findAllVentes(),
-      "productions" => $this->prodModel->findAll()
+      "productions" => $this->prodModel->findAll(),
+      "reponse" => $this->prodModel->findAllWithPagination($page, OFFSET),
+      "currentPage" => $page
+      
     ]);
   }
 
   public function AjouterArticleDansProd(array $data): void
   {
-    if (Session::get('panierProd')==false) {
-      $panier= new PanierModel();
-    }else{
-      $panier= Session::get('panierProd');
+    Validator::isEmpty($data["observation"], "observation");
+    if(!Validator::isEmpty($data["qteProd"], "qteProd")){
+      Validator::isPossitive($data["qteProd"], "qteProd");
     }
-    $panier->addArticleProd($this->articleModel->findById($data["articleId"]),$data["qteProd"]);
-    Session::add("panierProd", $panier);
-    parent::redirectToRoute("controller=production&action=form-production");
-
+    if (Validator::isValide()) {
+      if (Session::get('panierProd')==false) {
+        $panier= new PanierModel();
+      }else{
+        $panier= Session::get('panierProd');
+      }
+      $panier->addArticleProd($this->articleModel->findById($data["articleId"]),$data["qteProd"]);
+      Session::add("panierProd", $panier);
+      parent::redirectToRoute("controller=production&action=form-production");
+    }else {
+      Session::add("errors", Validator::$errors);
+      parent::redirectToRoute("controller=production&action=form-production");
+    }
+    
   }
 
   public function AjouterProd(): void
   {
     $panier= Session::get('panierProd');
+    if ($panier != false) {
     $this->prodModel->save($panier);
     // $panier->clear();
     Session::remove('panierProd');
 
     parent::redirectToRoute("controller=production&action=form-production");
+  }else{
+    parent::redirectToRoute("controller=production&action=form-production");
   }
+}
+public function viderPanier(): void{
+
+  $panier= Session::get('panierProd');
+  if ($panier != false) {
+    $panier->clear();
+    Session::remove('panierProd');
+  }
+  parent::redirectToRoute("controller=production&action=form-production");
+    
+}
   public function ChargerFormulaire(): void
   {
     parent::renderView("productions/form", [

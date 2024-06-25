@@ -9,7 +9,16 @@ if (Session::get('errors')) {
 
 <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md mb-10 dark:bg-gray-800">
   <h2 class="text-2xl font-bold mb-6 text-purple-900 dark:text-purple-400">Nouvelle Approvisionnement</h2>
-
+  <a href="<?= WEBROOT ?>/?controller=appro&action=vider-panier"
+      class="float-end -mt-14 inline-flex items-center px-4 py-2 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-110">
+      <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" class="h-5 w-5 mr-2"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+      </svg>
+      Vider
+    </a>
   <form action="<?= WEBROOT ?>" method="post">
     <div class="mb-4">
       <label class="block text-gray-700 font-medium mb-2 dark:text-gray-300">Fournisseur:</label>

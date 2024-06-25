@@ -34,13 +34,15 @@ class ApprovisionnementController extends Controller
   {
     if (isset($_REQUEST['action'])) {
       if ($_REQUEST['action'] == "liste-appro") {
-        $this->Lister();
+        $this->Lister($_REQUEST['page']);
       } elseif ($_REQUEST['action'] == "form-appro") {
         $this->ChargerFormulaire();
       } elseif ($_REQUEST['action'] == "add-appro") {
         $this->AjouterArticleDansAppro($_POST);
       } elseif ($_REQUEST['action'] == "save-appro") {
         $this->AjouterAppro();
+      }elseif ($_REQUEST['action'] == "vider-panier") {
+        $this->viderPanier();
       }elseif ($_REQUEST['action'] == "filter-appro") {
         $this->ListerWithFilter();
       }
@@ -94,11 +96,12 @@ class ApprovisionnementController extends Controller
     ]);
   }
 
-  public function Lister(): void
+  public function Lister(int $page=0): void
   {
     $this->renderView("appros/liste", [
       "articles" => $this->articleModel->findAll(),
-      "appros" => $this->approModel->findAll()
+      "reponse" => $this->approModel->findAllWithPagination($page, OFFSET),
+      "currentPage" => $page
     ]);
   }
   public function AjouterArticleDansAppro(array $data): void
@@ -129,6 +132,14 @@ class ApprovisionnementController extends Controller
       "fournisseurs" => $this->fournisseurModel->findAll(),
       "articles" => $this->articleModel->findAll()
     ]);
+  }
+  public function viderPanier(): void{
+    $panier= Session::get('panier');
+    if ($panier != false) {
+      $panier->clear();
+      Session::remove('panierProd');
+    }
+    parent::redirectToRoute("controller=appro&action=form-appro");
   }
   public function store(array $article): void
   {

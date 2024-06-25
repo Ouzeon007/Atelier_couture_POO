@@ -34,19 +34,51 @@ final class ProductionModel extends Model
     {
         return $this->executeSelect("SELECT * FROM $this->table a ");
     }
-    public function findAllWithDtate(string $date): array
+    public function findAllWithPagination(int $page=0, int $offset=OFFSET): array
     {
-        return $this->executeSelect("SELECT * FROM $this->table a WHERE a.date = '$date'");
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrProd FROM production",true);
+        $data= $this->executeSelect("SELECT * FROM $this->table a limit $page, $offset");
+        return[
+            "totalElements"=>$result['nbrProd'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrProd']/$offset)
+        ];
     }
-    public function findAllWithAllFilter(string $date, int $id): array
+    public function findAllWithDtate(string $date,int $page=0, int $offset=OFFSET): array
     {
-        // return $this->executeSelect("SELECT * FROM $this->table a WHERE a.date = '$date'");
-        return $this->executeSelect("SELECT * FROM $this->table a , detailprod d ,article ac WHERE a.date = '$date' and d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id");
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrProd FROM production a WHERE a.date = '$date'",true);
+        $data= $this->executeSelect("SELECT * FROM $this->table a WHERE a.date = '$date' limit $page, $offset");
+        return[
+            "totalElements"=>$result['nbrProd'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrProd']/$offset)
+        ];
     }
-    public function findAllWithFilterArticle(int $id): array
-    {
         // return $this->executeSelect("SELECT * FROM $this->table a WHERE a.date = '$date'");
-        return $this->executeSelect("SELECT * FROM $this->table a , detailprod d ,article ac WHERE d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id");
+    public function findAllWithAllFilter(string $date, int $id,int $page=0, int $offset=OFFSET): array
+    {
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrProd FROM production a, detailprod d ,article ac WHERE a.date = '$date' and d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id",true);
+        $data= $this->executeSelect("SELECT * FROM $this->table a , detailprod d ,article ac WHERE a.date = '$date' and d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id");
+        return[
+            "totalElements"=>$result['nbrProd'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrProd']/$offset)
+        ];
+        // return $this->executeSelect("SELECT * FROM $this->table a , detailprod d ,article ac WHERE a.date = '$date' and d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id");
+    }
+    public function findAllWithFilterArticle(int $id,int $page=0, int $offset=OFFSET): array
+    {
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrProd FROM production a , detailprod d ,article ac WHERE d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id",true);
+        $data= $this->executeSelect("SELECT * FROM $this->table a , detailprod d ,article ac WHERE d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id limit $page, $offset");
+        return[
+            "totalElements"=>$result['nbrProd'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrProd']/$offset)
+        ];
     }
     // public function findById(int $id): array
     // {

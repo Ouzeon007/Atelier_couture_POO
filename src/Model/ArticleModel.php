@@ -18,6 +18,10 @@ class ArticleModel extends Model
     {
         return $this->executeSelect("SELECT * FROM article a WHERE a.typeId=2 ");
     }
+    public function findAllConnfectiones(): array
+    {
+        return $this->executeSelect("SELECT * FROM article a WHERE a.typeId=1 ");
+    }
     public function findAllWithPagination(int $page=0, int $offset=OFFSET): array
     {
         $page*=$offset;

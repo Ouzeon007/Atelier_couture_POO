@@ -46,33 +46,90 @@ final class ApprovisionnementModel extends Model
         ];
     }
 
-    public function findAllWithAllFilter(string $date, int $id, string $fournisseur): array
+    public function findAllWithAllFilter(string $date, int $id, string $fournisseur, int $page=0, int $offset=OFFSET): array
     {
-        return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f,detail d,article ac WHERE a.fournisseurId = f.idFour and a.date = '$date' and d.approId =a.idAppro and d.articleId=ac.id  AND d.articleId=$id and f.nomFour = '$fournisseur'");
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrAppro FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and a.date = '$date' and f.nomFour = '$fournisseur'",true);
+        $data= $this->executeSelect("SELECT * FROM $this->table a, fournisseur f,detail d,article ac WHERE a.fournisseurId = f.idFour and a.date = '$date' and d.approId =a.idAppro and d.articleId=ac.id  AND d.articleId=$id and f.nomFour = '$fournisseur' limit $page, $offset");
+        return[
+            "totalElements"=>$result['nbrAppro'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrAppro']/$offset)
+        ];
+        // return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f,detail d,article ac WHERE a.fournisseurId = f.idFour and a.date = '$date' and d.approId =a.idAppro and d.articleId=ac.id  AND d.articleId=$id and f.nomFour = '$fournisseur'");
     }
-    public function findAllWithDtate(string $date): array
+    public function findAllWithDtate(string $date, int $page=0, int $offset=OFFSET): array
     {
-        return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and a.date = '$date'");
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrAppro FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and a.date = '$date'",true);
+        $data= $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and a.date = '$date' limit $page, $offset");
+        return[
+            "totalElements"=>$result['nbrAppro'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrAppro']/$offset)
+        ];
     }
-    public function findAllWithFournisseur(string $four): array
+        // return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and a.date = '$date'");
+
+    public function findAllWithFournisseur(string $four, int $page=0, int $offset=OFFSET): array
     {
-        return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and f.nomFour = '$four'");
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrAppro FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and f.nomFour = '$four'",true);
+        $data= $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and f.nomFour = '$four' limit $page, $offset");
+        return[
+            "totalElements"=>$result['nbrAppro'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrAppro']/$offset)
+        ];
+        // return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and f.nomFour = '$four'");
     }
-    public function findAllWithFilterArticle(int $id): array
+    public function findAllWithFilterArticle(int $id, int $page=0, int $offset=OFFSET): array
     {
-        return $this->executeSelect("SELECT * FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id");
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrAppro FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id",true);
+        $data= $this->executeSelect("SELECT * FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id limit $page, $offset");
+        return[
+            "totalElements"=>$result['nbrAppro'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrAppro']/$offset)
+        ];
+        //return $this->executeSelect("SELECT * FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id");
     }
-    public function findAllWithFilterArticleAndDate(int $id, string $date): array
+    public function findAllWithFilterArticleAndDate(int $id, string $date, int $page= 0, int $offset=OFFSET): array
     {
-        return $this->executeSelect("SELECT * FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id and a.date = '$date'");
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrAppro FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id and a.date = '$date'",true);
+        $data= $this->executeSelect("SELECT * FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id and a.date = '$date'");
+        return[
+            "totalElements"=>$result['nbrAppro'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrAppro']/$offset)
+        ];
+        // return $this->executeSelect("SELECT * FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id and a.date = '$date'");
     }
-    public function findAllWithFilterArticleAndFournisseur(int $id, string $fournisseur): array
+    public function findAllWithFilterArticleAndFournisseur(int $id, string $fournisseur, int $page=0, int $offset=OFFSET): array
     {
-        return $this->executeSelect("SELECT * FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id and f.nomFour = '$fournisseur'");
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrAppro FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id and f.nomFour = '$fournisseur'",true);
+        $data= $this->executeSelect("SELECT * FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id and f.nomFour = '$fournisseur'");
+        return[
+            "totalElements"=>$result['nbrAppro'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrAppro']/$offset)
+        ];
+        // return $this->executeSelect("SELECT * FROM `appro` a, detail d, fournisseur f,article ac WHERE a.fournisseurId=f.idFour and d.approId =a.idAppro AND d.articleId=ac.id AND d.articleId=$id and f.nomFour = '$fournisseur'");
     }
-    public function findAllWithFilterDateAndFournisseur(string $date, string $fournisseur): array
+    public function findAllWithFilterDateAndFournisseur(string $date, string $fournisseur, int $page=0, int $offset=OFFSET): array
     {
-        return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f,detail d,article ac WHERE a.fournisseurId = f.idFour and a.date = '$date' and d.approId =a.idAppro and d.articleId=ac.id and f.nomFour = '$fournisseur'");
+        $page*=$offset;
+        $result=$this->executeSelect("SELECT count(*) as nbrAppro FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour and a.date = '$date' and f.nomFour = '$fournisseur'",true);
+        $data= $this->executeSelect("SELECT * FROM $this->table a, fournisseur f,detail d,article ac WHERE a.fournisseurId = f.idFour and a.date = '$date' and d.approId =a.idAppro and d.articleId=ac.id and f.nomFour = '$fournisseur'");
+        return[
+            "totalElements"=>$result['nbrAppro'],
+            "data"=>$data,
+            "pages"=>ceil($result['nbrAppro']/$offset)
+        ];
+        //return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f,detail d,article ac WHERE a.fournisseurId = f.idFour and a.date = '$date' and d.approId =a.idAppro and d.articleId=ac.id and f.nomFour = '$fournisseur'");
     }
 
     

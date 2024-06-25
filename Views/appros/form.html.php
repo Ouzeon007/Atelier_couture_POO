@@ -48,10 +48,10 @@ if (Session::get('errors')) {
       <div class="w-2/4">
         <label class="block text-gray-700 font-medium mb-2 dark:text-gray-300">Qte Appro:</label>
         <input id="prix" type="text" name="qteAppro"
-          class="<?= add_classe_invalid('prixAppro') ?> w-full px-3 py-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 dark:bg-gray-800 text-gray-400"
+          class="<?= add_classe_invalid('qteAppro') ?> w-full px-3 py-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 dark:bg-gray-800 text-gray-400"
           placeholder="Prix">
         <div class="text-red-700 rounded relative" role="alert">
-          <strong class="font-bold"><?= $errors['prixAppro'] ?? "" ?></strong>
+          <strong class="font-bold"><?= $errors['qteAppro'] ?? "" ?></strong>
         </div>
       </div>
       <div class="flex items-end">

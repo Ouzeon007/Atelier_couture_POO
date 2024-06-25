@@ -8,7 +8,7 @@
           class="w-full px-3 py-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 dark:bg-gray-800 text-gray-400">
       </div>
       <div class="w-1/5">
-      <label class="block text-gray-700 font-medium mb-2 dark:text-gray-300">Article:</label>
+        <label class="block text-gray-700 font-medium mb-2 dark:text-gray-300">Article:</label>
         <select id="select" name="articleId"
           class="w-full px-3 py-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 dark:bg-gray-800 text-gray-400">
           <option value="" disabled selected class="dark:text-gray-300">Choisissez un type</option>
@@ -19,19 +19,21 @@
         </select>
       </div>
 
-      <div class="w-1/5" >
+      <div class="w-1/5">
         <label class="block text-gray-700 font-medium mb-2 dark:text-gray-300">Fournisseur:</label>
         <input type="text" name="nomFour" value="<?= isset($_GET['nomFour']) ? $_GET['nomFour'] : '' ?>"
           class="w-full px-3 py-2 border-b border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 dark:bg-gray-800 text-gray-400">
       </div>
 
-    
-    <div class="mt-8">
-    <input type="hidden" name="controller" value="appro">
-      <input type="hidden" name="action" value="filter-appro">
-      <button type="submit"
-        class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">Filtrer</button>
-    </div>
+
+      <div class="mt-8">
+        <input type="hidden" name="controller" value="appro">
+        <input type="hidden" name="action" value="filter-appro">
+        <input type="hidden" name="page" value="0">
+
+        <button type="submit"
+          class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">Filtrer</button>
+      </div>
     </div>
   </form>
 
@@ -91,36 +93,37 @@
   </table>
 
   <nav aria-label="Page navigation example">
-        <ul class="flex items-center -space-x-px h-10 text-base mt-5  justify-center">
-            <li>
-                <a href="#"
-                    class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                    <span class="sr-only">Previous</span>
-                    <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 1 1 5l4 4" />
-                    </svg>
-                </a>
-            </li>
-            <?php for ($page = 0; $page < $reponse["pages"]; $page++): ?>
-                <li>
-                    <a href="<?= WEBROOT ?>/?controller=appro&action=liste-appro&page=<?=$page?>" 
-                        class=" <?php if($page==$currentPage) echo "bg-red-500 text-purple-900 dark:text-white dark:bg-purple-500" ?> <?= ($page == $reponse["pages"]) ?> flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?= $page + 1 ?></a>
-                </li>
-            <?php endfor; ?>
-            <li>
-                <a href="#"
-                    class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                    <span class="sr-only">Next</span>
-                    <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 9 4-4-4-4" />
-                    </svg>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <ul class="flex items-center -space-x-px h-10 text-base mt-5  justify-center">
+      <li>
+        <a href="<?= WEBROOT ?>/<?= WEBROOT ?>/?date=<?php if(isset($_GET['date']))echo $_GET['date']?><?php if (isset($_GET['articleId']))echo "&articleId=".$_GET['articleId']?>&nomFour=<?php if(isset($_GET['nomFour']))echo $_GET['nomFour']?>&controller=appro&action=filter-appro&page=<?php if ($currentPage>0) echo $currentPage-1; else echo 0?>"
+          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <span class="sr-only">Previous</span>
+          <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 1 1 5l4 4" />
+          </svg>
+        </a>
+      </li>
+      <?php for ($page = 0; $page < $reponse["pages"]; $page++): ?>
+        <li>
+          <a href="<?= WEBROOT ?>/?date=<?php if(isset($_GET['date']))echo $_GET['date']?><?php if (isset($_GET['articleId']))echo "&articleId=".$_GET['articleId']?>&nomFour=<?php if(isset($_GET['nomFour']))echo $_GET['nomFour']?>&controller=appro&action=filter-appro&page=<?= $page ?>"
+            class=" <?php if ($page == $currentPage)
+              echo "bg-red-500 text-purple-900 dark:text-white dark:bg-purple-500" ?> <?= ($page == $reponse["pages"]) ?> flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?= $page + 1 ?></a>
+        </li>
+      <?php endfor; ?>
+      <li>
+        <a href="<?= WEBROOT ?>/<?= WEBROOT ?>/?date=<?php if(isset($_GET['date']))echo $_GET['date']?><?php if (isset($_GET['articleId']))echo "&articleId=".$_GET['articleId']?>&nomFour=<?php if(isset($_GET['nomFour']))echo $_GET['nomFour']?>&controller=appro&action=filter-appro&page=<?php if ($currentPage <$reponse["pages"]-1) echo $currentPage+1; else echo $_GET["page"]?>"
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <span class="sr-only">Next</span>
+          <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 9 4-4-4-4" />
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </nav>
 
 </div>

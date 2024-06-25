@@ -51,70 +51,121 @@ class ApprovisionnementController extends Controller
     }
 
   }
-  public function ListerWithFilter(): void
+  public function ListerWithFilter($page = 0): void
   {
 
 
     if ($_GET['date'] != "" && isset($_GET['articleId']) && $_GET['nomFour'] != "") {
       $this->renderView("appros/liste", [
-        "appros" => $this->approModel->findAllWithAllFilter($_GET['date'], $_GET['articleId'], $_GET['nomFour'])
+        "articles" => $this->articleModel->findAllConnfectiones(),
+        "appros" => $this->approModel->findAllWithAllFilter($_GET['date'], $_GET['articleId'], $_GET['nomFour']),
+        "reponse" => $this->approModel->findAllWithAllFilter($_GET['date'], $_GET['articleId'], $_GET['nomFour'],$page,OFFSET),
+        "currentPage" => $page
+
       ]);
     }elseif ($_GET['date'] != "" && isset($_GET['articleId']) == false && $_GET['nomFour'] == "") {
       $this->renderView("appros/liste", [
-        "articles" => $this->articleModel->findAll(),
-        "appros" => $this->approModel->findAllWithDtate($_GET['date'])
+        "articles" => $this->articleModel->findAllConnfectiones(),
+        "appros" => $this->approModel->findAllWithDtate($_GET['date']),
+        "reponse" => $this->approModel->findAllWithDtate($_GET['date'], $page, OFFSET),
+        "currentPage" => $page
       ]);
     }elseif ($_GET['date'] == "" && isset($_GET['articleId']) == false && $_GET['nomFour'] != "") {
       $this->renderView("appros/liste", [
-        "articles" => $this->articleModel->findAll(),
-        "appros" => $this->approModel->findAllWithFournisseur($_GET['nomFour'])
+        "articles" => $this->articleModel->findAllConnfectiones(),
+        "appros" => $this->approModel->findAllWithFournisseur($_GET['nomFour']),
+        'reponse' => $this->approModel->findAllWithFournisseur($_GET['nomFour'], $page, OFFSET),
+        "currentPage" => $page
       ]);
     }elseif ($_GET['date'] == "" && isset($_GET['articleId']) && $_GET['nomFour'] == "") {
       $this->renderView("appros/liste", [
-        "articles" => $this->articleModel->findAll(),
-        "appros" => $this->approModel->findAllWithFilterArticle($_GET['articleId'])
+        "articles" => $this->articleModel->findAllConnfectiones(),
+        "appros" => $this->approModel->findAllWithFilterArticle($_GET['articleId']),
+        'reponse' => $this->approModel->findAllWithFilterArticle($_GET['articleId'], $page, OFFSET),
+        "currentPage" => $page
       ]);
     }elseif ($_GET['date'] != "" && isset($_GET['articleId']) && $_GET['nomFour'] == "") {
       $this->renderView("appros/liste", [
-        "articles" => $this->articleModel->findAll(),
-        "appros" => $this->approModel->findAllWithFilterArticleAndDate($_GET['articleId'],$_GET['date'])
+        "articles" => $this->articleModel->findAllConnfectiones(),
+        "appros" => $this->approModel->findAllWithFilterArticleAndDate($_GET['articleId'],$_GET['date']),
+        'reponse' => $this->approModel->findAllWithFilterArticleAndDate($_GET['articleId'], $_GET['date'], $page, OFFSET),
+        "currentPage" => $page
       ]);
     }
     elseif ($_GET['date'] == "" && isset($_GET['articleId']) && $_GET['nomFour'] != "") {
       $this->renderView("appros/liste", [
-        "articles" => $this->articleModel->findAll(),
-        "appros" => $this->approModel->findAllWithFilterArticleAndFournisseur($_GET['articleId'],$_GET['nomFour'])
+        "articles" => $this->articleModel->findAllConnfectiones(),
+        "appros" => $this->approModel->findAllWithFilterArticleAndFournisseur($_GET['articleId'],$_GET['nomFour']),
+        'reponse' => $this->approModel->findAllWithFilterArticleAndFournisseur($_GET['articleId'], $_GET['nomFour'], $page, OFFSET),
+        "currentPage" => $page
       ]);
     }elseif ($_GET['date'] != "" && isset($_GET['articleId'])==false && $_GET['nomFour'] != "") {
       $this->renderView("appros/liste", [
-        "articles" => $this->articleModel->findAll(),
-        "appros" => $this->approModel->findAllWithFilterArticleAndFournisseur($_GET['articleId'],$_GET['nomFour'])
+        "articles" => $this->articleModel->findAllConnfectiones(),
+        "appros" => $this->approModel->findAllWithFilterArticleAndFournisseur($_GET['articleId'],$_GET['nomFour']),
+        'reponse' => $this->approModel->findAllWithFilterArticleAndFournisseur($_GET['articleId'], $_GET['nomFour'], $page, OFFSET),
+        "currentPage" => $page
       ]);
     }
     $this->renderView("appros/liste", [
-      "appros" => $this->approModel->findAll()
+      "articles" => $this->articleModel->findAllConnfectiones(),
+      "appros" => $this->approModel->findAll(),
+      'reponse' => $this->approModel->findAllWithPagination($page, OFFSET),
+      "currentPage" => $page
     ]);
   }
 
   public function Lister(int $page=0): void
   {
     $this->renderView("appros/liste", [
-      "articles" => $this->articleModel->findAll(),
+      "articles" => $this->articleModel->findAllConnfectiones(),
       "reponse" => $this->approModel->findAllWithPagination($page, OFFSET),
       "currentPage" => $page
     ]);
   }
   public function AjouterArticleDansAppro(array $data): void
   {
+   if (!Validator::isEmpty($data["qteAppro"], "qteAppro")) {
+    Validator::isPossitive($data["qteAppro"], "qteAppro");
+   } 
+   if (Validator::isValide()) {
     if (Session::get('panier')==false) {
       $panier= new PanierModel();
     }else{
       $panier= Session::get('panier');
     }
+
     $panier->addArticle($this->articleModel->findById($data["articleId"]),$data["fournisseurId"],$data["qteAppro"]);
     Session::add("panier", $panier);
     parent::redirectToRoute("controller=appro&action=form-appro");
+   }else{
+    Session::add("errors", Validator::$errors);
+    parent::redirectToRoute("controller=appro&action=form-appro");
+   }
+    
 
+  }
+
+  public function AjouterArticleDansProd(array $data): void
+  {
+    Validator::isEmpty($data["observation"], "observation");
+    if(!Validator::isEmpty($data["qteProd"], "qteProd")){
+      Validator::isPossitive($data["qteProd"], "qteProd");
+    }
+    if (Validator::isValide()) {
+      if (Session::get('panierProd')==false) {
+        $panier= new PanierModel();
+      }else{
+        $panier= Session::get('panierProd');
+      }
+      $panier->addArticleProd($this->articleModel->findById($data["articleId"]),$data["qteProd"]);
+      Session::add("panierProd", $panier);
+      parent::redirectToRoute("controller=production&action=form-production");
+    }else {
+      Session::add("errors", Validator::$errors);
+      parent::redirectToRoute("controller=production&action=form-production");
+    }
+    
   }
 
   public function AjouterAppro(): void
@@ -130,7 +181,7 @@ class ApprovisionnementController extends Controller
   {
     parent::renderView("appros/form", [
       "fournisseurs" => $this->fournisseurModel->findAll(),
-      "articles" => $this->articleModel->findAll()
+      "articles" => $this->articleModel->findAllConnfectiones()
     ]);
   }
   public function viderPanier(): void{

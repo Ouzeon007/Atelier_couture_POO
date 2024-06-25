@@ -61,7 +61,7 @@ final class ProductionModel extends Model
     {
         $page*=$offset;
         $result=$this->executeSelect("SELECT count(*) as nbrProd FROM production a, detailprod d ,article ac WHERE a.date = '$date' and d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id",true);
-        $data= $this->executeSelect("SELECT * FROM $this->table a , detailprod d ,article ac WHERE a.date = '$date' and d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id");
+        $data= $this->executeSelect("SELECT * FROM $this->table a , detailprod d ,article ac WHERE a.date = '$date' and d.productionId =a.idProd and d.articleId=ac.id  AND d.articleId=$id limit $page, $offset");
         return[
             "totalElements"=>$result['nbrProd'],
             "data"=>$data,

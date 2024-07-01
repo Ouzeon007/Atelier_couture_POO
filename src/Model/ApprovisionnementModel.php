@@ -34,6 +34,10 @@ final class ApprovisionnementModel extends Model
     {
         return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f WHERE a.fournisseurId = f.idFour ");
     }
+    public function findAllDetails(int $id): array
+    {
+        return $this->executeSelect("SELECT * FROM $this->table a, fournisseur f,detail d,article ac WHERE a.fournisseurId = f.idFour and d.approId =a.idAppro and d.approId=$id and d.articleId=ac.id");
+    }
     public function findAllWithPagination(int $page=0, int $offset=OFFSET): array
     {
         $page*=$offset;

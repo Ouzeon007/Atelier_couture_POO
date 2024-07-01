@@ -45,6 +45,11 @@ class ApprovisionnementController extends Controller
         $this->viderPanier();
       }elseif ($_REQUEST['action'] == "filter-appro") {
         $this->ListerWithFilter();
+      }elseif ($_REQUEST['action'] == "detail-appro") {
+        parent::renderView("appros/detail", [
+          "approDetail" => $this->approModel->findAllDetails($_GET['id']),
+
+        ]);
       }
     } else {
       $this->Lister();

@@ -6,6 +6,7 @@ use Ond\AtelierCouturePoo\Core\Model;
 final class PanierModel
 {
   public $fournisseur;
+  public $client;
   public array $articles = [];
   public $total;
   public $observation;
@@ -23,7 +24,7 @@ final class PanierModel
       $article["montantArticle"] = $montantArticle;
       $this->articles[] = $article;
     }
-    
+
     $this->fournisseur = $fournisseur;
     $this->total += $montantArticle;
   }
@@ -31,12 +32,12 @@ final class PanierModel
   public function addArticleProd($article, $qteProd)
   {
     $montantArticle = $this->montantArticle($article["prixAppro"], $qteProd);
-    $obs=$_POST["observation"];
+    $obs = $_POST["observation"];
     $key = $this->articleExist($article);
     if ($key != -1) {
       $this->articles[$key]["qteProd"] += $qteProd;
       $this->articles[$key]["montantArticle"] += $montantArticle;
-      $this->articles[$key]["observation"] = $_POST["observation"];
+      // $this->articles[$key]["observation"] = $_POST["observation"];
 
     } else {
       $article["qteProd"] = $qteProd;
@@ -45,6 +46,25 @@ final class PanierModel
       $this->articles[] = $article;
     }
     $this->observation = $obs;
+    $this->total += $montantArticle;
+  }
+
+  public function addArticleVente($article, $client, $qteVente)
+  {
+    $montantArticle = $this->montantArticle($article["prixAppro"], $qteVente);
+    $key = $this->articleExist($article);
+    if ($key != -1) {
+      $this->articles[$key]["qteVente"] += $qteVente;
+      $this->articles[$key]["montantArticle"] += $montantArticle;
+
+    } else {
+      $article["qteVente"] = $qteVente;
+      $article["montantArticle"] = $montantArticle;
+      $this->articles[] = $article;
+    }
+
+    $this->client = $client;
+    $this->observation = $_POST["observation"];
     $this->total += $montantArticle;
   }
 

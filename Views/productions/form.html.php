@@ -31,7 +31,7 @@ if (Session::get('errors')) {
         placeholder="Observation"><?php if (Session::get('panierProd') != false)
           echo Session::get('panierProd')->observation;
         else
-          echo "" ?> </textarea>
+          echo ""?></textarea>
 
         <div class="text-red-700 rounded relative" role="alert">
           <strong class="font-bold"><?= $errors['observation'] ?? "" ?></strong>

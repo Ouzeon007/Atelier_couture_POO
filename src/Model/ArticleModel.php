@@ -22,6 +22,10 @@ class ArticleModel extends Model
     {
         return $this->executeSelect("SELECT * FROM article a WHERE a.typeId=1 ");
     }
+    public function findAllArticleProduit(): array
+    {
+        return $this->executeSelect("SELECT * FROM article a, detailprod d WHERE a.id=d.articleId and ");
+    }
     public function findAllWithPagination(int $page=0, int $offset=OFFSET): array
     {
         $page*=$offset;

@@ -25,7 +25,7 @@ final class ProductionModel extends Model
             $montantAricle=$article["montantArticle"];
             $idArcle=$article["id"];
             $this->executeUpdate("INSERT INTO `detailprod` (`qteProd`, `articleId`, `productionId`, `montant`) VALUES ($qteProd, $idArcle,$approId, $montantAricle);");
-            $this->executeUpdate("UPDATE `article` SET `qteStock` = $qteStock-$qteProd WHERE `article`.`id` = $idArcle;");
+            $this->executeUpdate("UPDATE `article` SET `qteStock` = $qteStock+$qteProd WHERE `article`.`id` = $idArcle;");
           }
 
         return 1;

@@ -8,6 +8,7 @@ use Ond\AtelierCouturePoo\Controllers\ArticleController;
 use Ond\AtelierCouturePoo\Controllers\CategorieController;
 use Ond\AtelierCouturePoo\Api\CategorieController as ApiCategorieController;
 use Ond\AtelierCouturePoo\Controllers\TypeController;
+use Ond\AtelierCouturePoo\Controllers\VenteController;
 
 class Router
 {
@@ -36,6 +37,8 @@ class Router
         $controller = new ApprovisionnementController();
       }elseif ($_REQUEST["controller"] == "production") {
         $controller = new ProductionController();
+      }elseif ($_REQUEST["controller"] == "vente") {
+        $controller = new VenteController();
       }
     } else {
       // require_once ("../src/Controllers/SecurityController.php");

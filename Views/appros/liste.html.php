@@ -46,12 +46,12 @@
       class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800 rounded-t-lg">
       Tableau Articles
       <a class="rounded-md font-bold bg-purple-500 hover:bg-purple-600 focus:ring-4 ring-purple-300 shadow-sm px-2 py-2 text-white focus:outline-2 outline-transparent outline-offset-4 float-end active:bg-purple-600/90 ml-3"
-        href="<?= WEBROOT ?>/?controller=appro&action=form-appro"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+        href="<?= WEBROOT ?>/?controller=appro&action=form-appro"> <div class="flex"><svg xmlns="http://www.w3.org/2000/svg" width="24"
           height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round" class="lucide lucide-plus">
           <path d="M5 12h14" />
           <path d="M12 5v14" />
-        </svg> Appro</a>
+        </svg> Appro </div></a>
     </caption>
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>

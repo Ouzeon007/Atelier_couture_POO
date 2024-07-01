@@ -24,6 +24,8 @@
                         href="<?= WEBROOT ?>/?controller=appro&action=liste-appro&page=0">Approvisionnement</a></li>
                 <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-purple-500 hover:text-purple-500 transition-colors duration-300 lg:mb-0 mb-2"
                         href="<?= WEBROOT ?>/?controller=production&action=liste-production&page=0">Production</a></li>
+                <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-purple-500 hover:text-purple-500 transition-colors duration-300 lg:mb-0 mb-2"
+                        href="<?= WEBROOT ?>/?controller=vente&action=liste-vente&page=0">Vente</a></li>
                 <li><a class="rounded-md font-bold bg-purple-500 hover:bg-purple-600 focus:ring-4 ring-purple-300 shadow-lg px-4 py-2 text-white transition-transform transform"
                         href="<?= WEBROOT ?>/?controller=securite&action=logout">Déconnexion</a>
             </ul>

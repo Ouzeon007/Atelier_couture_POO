@@ -45,6 +45,11 @@ class ProductionController extends Controller
         $this->viderPanier();
       }elseif ($_REQUEST['action'] == "filter-production") {
         $this->ListerWithFilter($_REQUEST['page']);
+      }elseif ($_REQUEST['action'] == "detail-production") {
+        parent::renderView("productions/detail", [
+          "productionDetails" => $this->prodModel->findAllDetails($_GET['id']),
+
+        ]);
       }
     } else {
       $this->Lister();

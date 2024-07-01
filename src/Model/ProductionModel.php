@@ -34,6 +34,10 @@ final class ProductionModel extends Model
     {
         return $this->executeSelect("SELECT * FROM $this->table a ");
     }
+    public function findAllDetails(int $id): array
+    {
+        return $this->executeSelect("SELECT * FROM $this->table a, detailprod d ,article ac WHERE d.productionId =a.idProd and d.productionId =$id and d.articleId=ac.id");
+    }
     public function findAllWithPagination(int $page=0, int $offset=OFFSET): array
     {
         $page*=$offset;

@@ -68,10 +68,7 @@
                     <td class="px-6 py-4">
 
                         <a class="text-purple-600 dark:text-purple-400 hover:text-purple-800 "
-                            href="<?= WEBROOT ?>/?controller=pr$production&action=update-article&id=<?= $production['idProd'] ?>">Modifier</a>
-                        <a class="text-red-400 hover:text-red-900 ml-4"
-                            href="<?= WEBROOT ?>/?controller=pr$production&action=delete-article&id=<?= $production['idProd'] ?>"
-                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">Supprimer</a>
+                            href="<?= WEBROOT ?>/?controller=production&action=detail-production&id=<?= $production['idProd'] ?>">Details</a>
                     </td>
                 </tr>
             <?php endforeach ?>
